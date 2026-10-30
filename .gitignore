@@ -1,0 +1,15 @@
+# ── Bản build / thư mục tạm (tự sinh khi chạy build.ps1) ──────
+dist/
+.build/
+
+# ── Ảnh test & screenshot ─────────────────────────────────────
+.build/shots/
+.build/testimg/
+
+# ── IDE / hệ điều hành ────────────────────────────────────────
+.vs/
+.vscode/
+*.user
+*.suo
+Thumbs.db
+desktop.ini

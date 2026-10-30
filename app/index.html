@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thumbnail Maker</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="mark">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="9" height="9" rx="2.2"/>
+          <rect x="12.5" y="2.5" width="9" height="19" rx="2.2" opacity=".55"/>
+          <rect x="2.5" y="12.5" width="9" height="4.2" rx="1.6" opacity=".8"/>
+          <rect x="2.5" y="17.3" width="9" height="4.2" rx="1.6" opacity=".55"/>
+        </svg>
+      </div>
+      <div class="brand-txt">
+        <b>Thumbnail Maker</b>
+        <span>Ghép ảnh nhanh</span>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn" id="btnAdd" title="Thêm ảnh (Ctrl+O)">
+        <svg viewBox="0 0 24 24" class="ico"><path d="M12 5v14M5 12h14"/></svg>
+        Thêm ảnh<kbd>Ctrl O</kbd>
+      </button>
+      <button class="btn primary" id="btnExport" title="Xuất ảnh (Ctrl+S)">
+        <svg viewBox="0 0 24 24" class="ico"><path d="M12 4v11m0 0 4.2-4.2M12 15l-4.2-4.2M5 18.5h14"/></svg>
+        Xuất ảnh<kbd>Ctrl S</kbd>
+      </button>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- ── Thư viện ảnh ────────────────────────────────────────── -->
+    <aside class="rail">
+      <div class="rail-head">
+        <span>Ảnh</span><em id="railCount">0</em>
+      </div>
+      <div class="rail-grid" id="railGrid">
+        <div class="rail-empty" id="railEmpty">
+          <svg viewBox="0 0 24 24" class="ico big"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="m4.5 17.5 4.6-4.3a1.6 1.6 0 0 1 2.2 0l3 2.8 1.8-1.6a1.6 1.6 0 0 1 2.1 0l2.3 2"/></svg>
+          <p>Chưa có ảnh</p>
+          <small>Thả ảnh vào đây</small>
+        </div>
+      </div>
+      <div class="rail-foot">
+        <button class="btn ghost tiny" id="btnAdd2">＋ Thêm</button>
+        <button class="btn ghost tiny" id="btnClear" title="Xoá toàn bộ ảnh">Xoá hết</button>
+      </div>
+    </aside>
+
+    <!-- ── Khung vẽ ─────────────────────────────────────────────── -->
+    <section class="stage">
+      <div class="stage-inner" id="stageInner">
+        <canvas id="cv"></canvas>
+      </div>
+      <div class="statusbar">
+        <div class="status-left">
+          <span class="dot" id="selDot"></span>
+          <span id="statusText">Khung 1</span>
+          <span class="sep"></span>
+          <span id="statusZoom">100%</span>
+          <span class="sep"></span>
+          <span id="statusSize">1280 × 720</span>
+        </div>
+        <div class="status-right">
+          <button class="btn ghost tiny" id="btnFitMode">Vừa khung</button>
+          <button class="btn ghost tiny" id="btnReset">Đặt lại</button>
+          <button class="btn ghost tiny danger" id="btnUnassign">Bỏ ảnh</button>
+        </div>
+      </div>
+      <div class="hintbar">
+        <span><b>Kéo</b> để canh ảnh</span>
+        <span><b>Lăn chuột</b> để zoom</span>
+        <span><b>Nhấp đúp</b> đặt lại khung</span>
+        <span><b>Mũi tên</b> dịch 1px</span>
+      </div>
+    </section>
+
+    <!-- ── Bảng điều khiển ──────────────────────────────────────── -->
+    <aside class="side">
+
+      <section class="sec">
+        <h3>Bố cục</h3>
+        <div class="seg" id="segCount">
+          <button data-n="2">2 ảnh</button>
+          <button data-n="3">3 ảnh</button>
+          <button data-n="4">4 ảnh</button>
+        </div>
+        <div class="layouts" id="layouts"></div>
+      </section>
+
+      <section class="sec">
+        <h3>Kích thước</h3>
+        <select id="sizePreset" class="input">
+          <option value="1280x720">1280 × 720 — YouTube</option>
+          <option value="1920x1080">1920 × 1080 — Full HD</option>
+          <option value="2560x1440">2560 × 1440 — 2K</option>
+          <option value="1080x1080">1080 × 1080 — Vuông</option>
+          <option value="1080x1350">1080 × 1350 — Dọc 4:5</option>
+          <option value="1080x1920">1080 × 1920 — Story/Shorts</option>
+          <option value="1200x630">1200 × 630 — Facebook</option>
+          <option value="custom">Tuỳ chỉnh…</option>
+        </select>
+        <div class="row2" id="sizeRow">
+          <label class="field"><span>Rộng</span><input type="number" id="inW" min="64" max="4096" step="2" value="1280"></label>
+          <label class="field"><span>Cao</span><input type="number" id="inH" min="64" max="4096" step="2" value="720"></label>
+        </div>
+      </section>
+
+      <section class="sec">
+        <h3>Trang trí</h3>
+        <label class="range">
+          <span class="range-top"><span>Khoảng cách</span><b id="gapVal">8</b></span>
+          <input type="range" id="inGap" min="0" max="48" step="1" value="8">
+        </label>
+        <label class="range">
+          <span class="range-top"><span>Bo góc</span><b id="radiusVal">14</b></span>
+          <input type="range" id="inRadius" min="0" max="64" step="1" value="14">
+        </label>
+        <div class="colors">
+          <span class="colors-label">Nền</span>
+          <div class="swatches" id="swatches"></div>
+          <input type="color" id="inBg" value="#0b0d11" class="color-input" title="Màu nền">
+        </div>
+      </section>
+
+      <section class="sec">
+        <h3>Xuất ảnh</h3>
+        <div class="seg small" id="segFormat">
+          <button data-f="png">PNG</button>
+          <button data-f="jpg">JPG</button>
+          <button data-f="webp">WebP</button>
+        </div>
+        <label class="range" id="qualityWrap">
+          <span class="range-top"><span>Chất lượng</span><b id="qualityVal">92%</b></span>
+          <input type="range" id="inQuality" min="40" max="100" step="1" value="92">
+        </label>
+        <label class="field wide"><span>Tên file</span><input type="text" id="inName" value="thumbnail" spellcheck="false"></label>
+        <button class="btn primary block" id="btnExport2">
+          <svg viewBox="0 0 24 24" class="ico"><path d="M12 4v11m0 0 4.2-4.2M12 15l-4.2-4.2M5 18.5h14"/></svg>
+          Xuất &amp; lưu ảnh
+        </button>
+      </section>
+
+    </aside>
+  </main>
+</div>
+
+<input type="file" id="fileInput" accept="image/*" multiple hidden>
+<div class="drop-veil" id="dropVeil">
+  <div class="drop-card">
+    <svg viewBox="0 0 24 24" class="ico big"><path d="M12 16V4m0 0 4 4m-4-4L8 8"/><path d="M4 16.5V18a2.5 2.5 0 0 0 2.5 2.5h11A2.5 2.5 0 0 0 20 18v-1.5"/></svg>
+    <b>Thả ảnh để thêm</b>
+    <small>PNG · JPG · WebP · GIF · BMP</small>
+  </div>
+</div>
+<div class="toasts" id="toasts"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
