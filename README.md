@@ -1,123 +1,66 @@
 # Thumbnail Maker
 
-Ứng dụng Windows nhỏ gọn để ghép 2 / 3 / 4 ảnh thành một thumbnail, canh chỉnh từng ảnh
-bằng chuột rồi xuất PNG · JPG · WebP.
+**Ghép 2–4 ảnh thành một thumbnail trên Windows, xử lý ảnh ngay trên máy.**
 
-- **Dung lượng: ~950 KB** (không cần cài .NET, không cần framework riêng — chỉ dùng WebView2 có sẵn trong Windows 11)
-- **Khởi động ~0,6 giây**
-- **Vẽ lại < 1 ms** mỗi khung hình, xuất ảnh 1920×1080 chỉ ~0,25 giây
+Dành cho người làm nội dung và người bán hàng cần ghép vài ảnh nhanh: chọn bố cục, kéo để canh ảnh, lăn chuột để zoom rồi xuất PNG, JPG hoặc WebP. Giao diện tiếng Việt, không cần đăng nhập.
 
----
+<img src="assets/app.png" alt="Thumbnail Maker" width="128">
 
-## 1. Cài đặt
+## Tính năng hiện có
 
-**Yêu cầu:** Windows 10/11 — đã có sẵn .NET Framework 4.8 và WebView2 Runtime (Win11 có cả hai).
-Không cần .NET SDK / Node / Python để **chạy**; Python + Pillow chỉ cần nếu muốn tạo lại icon.
+- Ghép 2, 3 hoặc 4 ảnh với 16 bố cục có sẵn.
+- Thêm ảnh bằng kéo thả, hộp chọn file hoặc dán từ clipboard.
+- Canh và zoom riêng từng khung; đổi số khung trong phiên vẫn giữ phần canh chỉnh.
+- Kích thước preset hoặc tùy chỉnh từ 64 đến 4096 px mỗi chiều.
+- Chỉnh khoảng cách, bo góc, màu nền và chất lượng JPG/WebP.
+- Xuất file trên máy, không chèn watermark trong phiên bản mã nguồn hiện tại.
+
+Hiện chưa có chèn chữ/logo, lưu và mở lại dự án chứa ảnh, xuất hàng loạt, AI, tài khoản, thanh toán hay kích hoạt bản quyền. Tính năng dự kiến nằm trong [kế hoạch thương mại hóa](docs/COMMERCIALIZATION.md), không phải tính năng đã có.
+
+## Cài đặt và sử dụng
+
+**Nền tảng:** Windows x64, .NET Framework 4.8 và Microsoft Edge WebView2 Runtime. Mã nguồn hướng tới Windows 10/11; cần kiểm thử trên phiên bản Windows sẽ hỗ trợ khi bán. Không cần Node.js hoặc Python để chạy bản đã build.
+
+Khi có gói phát hành chính thức, tải từ [GitHub Releases](https://github.com/ducchinhsero/Thumbnail-Maker/releases). Liên kết này không có nghĩa đã có bản phát hành hoặc đã mở bán. Repo hiện chưa cung cấp bộ cài thương mại có chữ ký số hay quy trình mua hàng.
+
+Chủ sở hữu và người được cấp phép phát triển có thể build/cài từ nguồn:
 
 ```powershell
 git clone https://github.com/ducchinhsero/Thumbnail-Maker.git
 cd Thumbnail-Maker
-powershell -ExecutionPolicy Bypass -File .\install.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
-Script sẽ build bản mới nhất (lần đầu tự tải WebView2 SDK ~9 MB), copy vào
-`%LOCALAPPDATA%\Programs\ThumbnailMaker` và tạo shortcut ở **Desktop** + **Start Menu**.
+Script tải WebView2 SDK lần đầu, build và cài vào `%LOCALAPPDATA%\Programs\ThumbnailMaker`, tạo shortcut Desktop và Start Menu. Thông thường không cần quyền quản trị. Tải SDK cần Internet; quá trình ghép và xuất ảnh không cần dịch vụ xử lý ảnh trực tuyến.
 
-Mở app: nút Start → gõ `Thumbnail Maker`, hoặc nhấp đúp shortcut ngoài Desktop.
+Mở **Thumbnail Maker** từ Start Menu → thêm ảnh → chọn 2/3/4 khung → kéo và zoom → **Ctrl+S** để xuất.
 
-> Gỡ cài: xoá `%LOCALAPPDATA%\Programs\ThumbnailMaker` và 2 shortcut.
+Xem [hướng dẫn sử dụng](docs/USER_GUIDE.md) để xem phím tắt, cập nhật, gỡ cài và xử lý lỗi.
 
-Chỉ muốn build lấy exe:
+## Quyền sử dụng và thương mại
 
-```powershell
-.\build.ps1          # → dist\ThumbnailMaker.exe (+ 3 DLL WebView2)
-```
+**Repo công khai để tham khảo mã nguồn; bảo lưu bản quyền. Đây không phải dự án nguồn mở theo giấy phép MIT/Apache/GPL.** Xem [LICENSE](LICENSE).
 
----
+Xem mã trên GitHub không cấp quyền bán lại, phân phối bản build, sửa đổi hoặc khai thác mã nguồn thương mại. Quyền xem/fork do điều khoản GitHub cung cấp vẫn được giữ nguyên. Quyền sử dụng bản ứng dụng thương mại phải được thỏa thuận riêng; repo không tự cấp giấy phép thương mại cho người tải về.
 
-## 2. Cách dùng
+Chưa công bố giá, kênh thanh toán hoặc chính sách mua hàng. Hỏi kênh liên hệ thương mại qua [hồ sơ người duy trì](https://github.com/ducchinhsero). Không gửi thông tin thanh toán qua Issue công khai.
 
-| Thao tác | Kết quả |
+Giấy phép dự án chỉ áp dụng phần mã/tài nguyên thuộc chủ sở hữu dự án. Thành phần Microsoft và bên thứ ba tuân theo [thông báo riêng](THIRD_PARTY_NOTICES.md). Người dùng cần có quyền đối với ảnh và nội dung mình sử dụng.
+
+## Tài liệu
+
+| Tài liệu | Nội dung |
 |---|---|
-| **Thêm ảnh** (Ctrl+O) hoặc kéo-thả file từ Explorer | Nạp ảnh, tự lấp vào các khung trống |
-| Kéo ảnh từ Explorer **thả vào một khung** | Gán ảnh vào đúng khung đó |
-| **Kéo trong khung** | Canh (pan) ảnh |
-| **Lăn chuột** trong khung | Zoom quanh vị trí con trỏ |
-| **Nhấp đúp** vào khung | Đặt lại khung đó (zoom 100 %, canh giữa) |
-| **Click vào thumbnail** ở cột trái | Gán ảnh vào khung đang chọn (tự đổi chỗ nếu ảnh đã nằm ở khung khác) |
-| **Ctrl+V** | Dán ảnh từ clipboard |
-| Mũi tên (Shift = 10px) | Dịch ảnh trong khung |
-| `+` / `-` / `0` | Zoom in / zoom out / đặt lại |
-| `2` `3` `4` | Đổi nhanh số khung |
-| Tab | Chuyển sang khung kế tiếp |
-| Delete | Bỏ ảnh khỏi khung |
-| **Ctrl+S** | Xuất ảnh |
+| [Sử dụng](docs/USER_GUIDE.md) | Thao tác, cập nhật và gỡ cài |
+| [Quyền riêng tư](PRIVACY.md) | Xử lý ảnh, cấu hình và log |
+| [Hỗ trợ](SUPPORT.md) | Báo lỗi, phạm vi hỗ trợ |
+| [Bảo mật](SECURITY.md) | Báo cáo riêng, chế độ phát triển |
+| [Phát triển](docs/DEVELOPMENT.md) | Build, kiểm thử và phát hành |
+| [Thương mại hóa](docs/COMMERCIALIZATION.md) | Định vị, kiểm chứng nhu cầu, điều kiện mở bán |
+| [Đóng góp](CONTRIBUTING.md) | Phản hồi và đề xuất sửa mã |
 
-### Bố cục
-- **2 ảnh**: Trái·Phải, Trên·Dưới, Lớn·Nhỏ, Nhỏ·Lớn
-- **3 ảnh**: 3 cột, 3 hàng, Lớn | 2, 2 | Lớn, Lớn trên, Lớn dưới
-- **4 ảnh**: Lưới 2×2, 4 cột, 4 hàng, Lớn | 3, 3 | Lớn, Lớn trên
+## Dung lượng và hiệu năng
 
-Đổi bố cục qua lại **không mất** phần canh chỉnh đã làm (mỗi ngăn được giữ riêng).
+Bản build x64 kiểm tra trên máy phát triển ngày 31/10/2026 gồm EXE và ba DLL, tổng khoảng **947 KiB**, chưa gồm WebView2 Runtime, hồ sơ trình duyệt và dữ liệu phát sinh. Ứng dụng đã khởi động và tải giao diện thành công trên máy này.
 
-### Kích thước & trang trí
-- Preset: 1280×720 (YouTube), 1920×1080, 2560×1440, 1080×1080, 1080×1350,
-  1080×1920, 1200×630, hoặc tự nhập (64 – 4096 px).
-- Khoảng cách giữa các khung, bo góc, màu nền (ô trống sẽ lộ màu nền).
-
-### Xuất
-PNG (không mất dữ liệu) · JPG · WebP, có thanh chất lượng cho JPG/WebP.
-Ảnh xuất ra đúng kích thước đã chọn, dùng thuật toán resample chất lượng cao.
-Sau khi lưu, góc phải dưới hiện thông báo kèm nút **Mở thư mục**.
-
----
-
-## 3. Cấu trúc dự án
-
-```
-thumbnail creator/
-├─ install.ps1          # cài đặt (build + copy + shortcut)
-├─ build.ps1            # build bằng csc (.NET Framework 4.8 có sẵn)
-├─ src/
-│  └─ ThumbnailMaker.cs # host C# WinForms + WebView2 (~600 dòng)
-├─ app/
-│  ├─ index.html        # giao diện (nhúng vào exe khi build)
-│  ├─ style.css
-│  └─ app.js            # engine canvas: bố cục, kéo/zoom, xuất ảnh
-├─ assets/              # icon + manifest + script tạo icon
-├─ tools/               # script test (CDP) + tạo ảnh mẫu
-├─ dist/                # bản build (ThumbnailMaker.exe + 3 DLL của WebView2)
-└─ .build/              # thư mục tạm: SDK WebView2, ảnh test, screenshot
-```
-
-**Kiến trúc:** exe C# chỉ làm 4 việc — tạo cửa sổ, khởi tạo WebView2, phục vụ
-`index.html/style.css/app.js` **từ tài nguyên nhúng trong exe** (không đọc file rời),
-và ghi file khi xuất ảnh (hộp thoại Save As gốc của Windows). Toàn bộ phần dựng ảnh
-chạy trên Chromium canvas nên nhanh và mượt.
-
-**Ghi chú kỹ thuật:** khởi động nhanh nhờ tắt WPAD/proxy auto-detect
-(`--proxy-server="direct://"`) — nếu không, Chromium mất ~2,2 giây chỉ để dò proxy
-cho host nội bộ `app.local`.
-
----
-
-## 4. Kiểm thử tự động
-
-```powershell
-.\dist\ThumbnailMaker.exe --dev      # bật cổng DevTools 9333
-node tools\cdp_test.mjs              # test bố cục, kéo/zoom, xuất ảnh
-node tools\cdp_perf.mjs              # đo tốc độ render / decode / xuất
-```
-
-Kết quả lần chạy gần nhất:
-
-```
-A. images loaded: 4  cells: ["i1","i2","i3","i4"]
-B. after 4→2→4:    ["i1","i2","i3","i4"]        (giữ nguyên canh chỉnh)
-C. drag pan:       panX 0.000 → -0.192  OK
-D. wheel zoom:     1.000 → 1.468  OK
-E. select cell:    sel = 2  OK
-H. file input:     2 ảnh  OK
-F. export png/jpg/webp  OK
-G. render:         0,2 ms/khung hình (p95), heap 6 MB
-```
+Thời gian khởi động/xuất ảnh phụ thuộc máy, Runtime, định dạng và kích thước ảnh. Số liệu đo cũ không được coi là cam kết cho mọi thiết bị; xem [cách kiểm thử](docs/DEVELOPMENT.md).
